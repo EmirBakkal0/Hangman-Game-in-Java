@@ -8,7 +8,6 @@ public class Word {
     private String word;
     private int noOfLives=6;
     public Word() throws FileNotFoundException {
-        this.word=word;
         ReadFromFile();
     }
 
@@ -23,6 +22,7 @@ public class Word {
         Random random= new Random();
         word=wordList.get(random.nextInt(wordList.size()));
         //System.out.println(word);
+        sc.close();
 
     }
 
@@ -70,8 +70,8 @@ public class Word {
             }
             System.out.println();
             System.out.println("Letters you've entered so far:");
-            for (int i = 0; i < enteredLetters.size(); i++) {
-                System.out.print(enteredLetters.get(i)+" ");
+            for (Character enteredLetter : enteredLetters) {
+                System.out.print(enteredLetter + " ");
             }
             System.out.println();
             if (gotRight == false)
@@ -94,6 +94,7 @@ public class Word {
         String a =scanner.next();
 
         return a.charAt(0);
+
     }
 
     public void printLives(){
