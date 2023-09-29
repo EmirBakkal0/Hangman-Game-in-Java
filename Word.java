@@ -3,15 +3,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.random.RandomGenerator;
 
 public class Word {
-    String word;
-    int noOfLives=6;
-    char[] charsOfWord;
-    public Word() {
+    private String word;
+    private int noOfLives=6;
+    public Word() throws FileNotFoundException {
         this.word=word;
-        word.getChars(0,word.length(),charsOfWord,0);
+        ReadFromFile();
     }
 
 
@@ -29,20 +27,74 @@ public class Word {
     }
 
     public void printLines(){
-        System.out.println(word.charAt(0));
+        //System.out.println(word);
+        boolean firstTime=true;
+        boolean won=false;
+        System.out.println();
 
-
-        System.out.println( "\n");
-        for (int i = 0; i < word.length(); i++) {   /// pri
-            System.out.print("_");
+        ArrayList<Character> lines= new ArrayList<>();
+        ArrayList<Character> enteredLetters= new ArrayList<>();
+        for (int i = 0; i <word.length() ; i++) {
+            lines.add('_');
         }
 
+        while (noOfLives!=0 && !won ) {
 
 
+            printLives();
+            if (firstTime) {   /// just to print to first empty lines __
+                for (int i = 0; i < word.length(); i++) {
+                    System.out.print(lines.get(i));
+                }
+                firstTime=false;
+            }
 
+            char input = getValueFromPlayer();
+            enteredLetters.add(input);
+            boolean gotRight = false;
+
+            for (int i = 0; i < word.length(); i++) {
+                if (input == word.charAt(i)) {
+                    lines.set(i,word.charAt(i));
+                    gotRight =true;
+                }
+            }
+            won=true;
+
+            for (int i = 0; i <word.length() ; i++) {
+                System.out.print(lines.get(i));
+                if(lines.get(i)=='_'){
+                    won=false;
+                }
+
+            }
+            System.out.println();
+            System.out.println("Letters you've entered so far:");
+            for (int i = 0; i < enteredLetters.size(); i++) {
+                System.out.print(enteredLetters.get(i)+" ");
+            }
+            System.out.println();
+            if (gotRight == false)
+                noOfLives--;
+
+        }
+        if (noOfLives>0){
+            System.out.println("\nYou got the word right! Congrats!!" );
+        }
+        else {
+            printLives();
+            System.out.println("\nSorry you've lost. The right word was '"+ word +"'");
+        }
 
     }
 
+    public char getValueFromPlayer(){
+        Scanner scanner =new Scanner(System.in);
+        System.out.println("\nPick a letter: ");
+        String a =scanner.next();
+
+        return a.charAt(0);
+    }
 
     public void printLives(){
         if (noOfLives==6){
@@ -124,6 +176,11 @@ public class Word {
         }
 
 
+    }
+
+    public void cls(){  //to clear the screen
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
 }
